@@ -42,7 +42,23 @@ app.post("/api/notes", function(req, res) {
   });
 });
 
-// app.delete("/api/notes/:id", function(req, res) {});
+app.delete("/api/notes/:id", function(req, res) {
+  const deleteNote = req.params.id;
+
+  fs.readFile(__dirname + "/db/db.json", "utf8", function(err, data) {
+    if (err) res.json(err);
+    const readNote = JSON.parse(data);
+    let newNote;
+    newNote = readNote.filter(note => note.id != deleteNote);
+
+    fs.writeFile(__dirname + "/db/db.json", JSON.stringify(newNote), function(
+      err
+    ) {
+      if (err) res.json(err);
+      res.json(newNote);
+    });
+  });
+});
 
 app.listen(PORT, function() {
   console.log("App listening on http://localhost:" + PORT);
