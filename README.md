@@ -18,7 +18,7 @@ For users that need to keep track of a lot of information, it's easy to forget o
 
 # Screen Shots
 
-![Output](image/note.png)
+![Output](public/image/note.png)
 
 # Links
 
