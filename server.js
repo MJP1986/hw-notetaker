@@ -13,15 +13,13 @@ app.use(express.static("public"));
 app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
+
 app.get("/api/notes", function(req, res) {
-  fs.readFile(__dirname + "/db/db.json", function(err, data) {
-    if (err) {
-      res.end("error not found");
-    } else {
-      res.json(data);
-    }
-  });
+  let notes = fs.readFileSync("./db/db.json", "utf8");
+  console.log(notes);
+  res.json(JSON.parse(notes));
 });
+
 app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
@@ -36,16 +34,15 @@ app.post("/api/notes", function(req, res) {
     readNotes.push(newNotes);
     const newArray = JSON.stringify(readNotes);
 
-    fs.writeFile(__dirname + "/db/db.json", newArray, function(err) {
+    fs.writeFile(__dirname + "/db/db.json", newArray, function(err, data) {
       if (err) res.json(err);
     });
-    console.log(readNotes);
     console.log(newNotes);
     res.json(readNotes.slice(-1));
   });
 });
 
-app.delete("/api/notes/:id", function(req, res) {});
+// app.delete("/api/notes/:id", function(req, res) {});
 
 app.listen(PORT, function() {
   console.log("App listening on http://localhost:" + PORT);
